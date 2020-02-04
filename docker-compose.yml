@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  admin:
+    build:
+      context: ./admin
+      args:
+      - PUBLIC_URL=/admin
+    networks:
+      - test
+
+  client:
+    build:
+      context: ./client
+      args:
+      - PUBLIC_URL=/client
+    networks:
+      - test
+
+  main:
+      build:
+        context: ./main
+        args:
+        - PUBLIC_URL=/
+      networks:
+        - test
+
+
+  gateway:
+    build:
+      context: ./gateway
+    ports:
+      - 3000:80
+    networks:
+      - test
+    depends_on:
+      - main
+      - client
+      - admin
+
+networks:
+  test:
